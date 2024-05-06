@@ -1,5 +1,6 @@
 package com.yemyatthu.usercentricsappchallenge.presentation.ui.screens.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.usercentrics.sdk.Usercentrics
@@ -27,12 +28,17 @@ class HomeScreenViewModel @Inject constructor(
     val uiState: StateFlow<HomeScreenUiState> = _uiState.asStateFlow()
     init {
         viewModelScope.launch {
-            Usercentrics.isReady(onSuccess = {
-                //Only enable show consent banner button when the sdk is ready
-                _uiState.value = HomeScreenUiState.EnabledConsentButton(true)
-            }, onFailure =  {
-                _uiState.value = HomeScreenUiState.EnabledConsentButton(false)
-            })
+            try {
+                Usercentrics.isReady(onSuccess = {
+                    //Only enable show consent banner button when the sdk is ready
+                    _uiState.value = HomeScreenUiState.EnabledConsentButton(true)
+                }, onFailure = {
+                    _uiState.value = HomeScreenUiState.EnabledConsentButton(false)
+                })
+            } catch (e: Exception) {
+                Log.e(HomeScreenViewModel::class.java.simpleName, e.message.toString())
+                _uiState.value = HomeScreenUiState.Error(e.message.toString())
+            }
         }
     }
     fun onConsentButtonClicked() {

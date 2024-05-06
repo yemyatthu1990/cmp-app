@@ -22,7 +22,7 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-        val usercentricsSettingsId = usercentricsproperties.getProperty("settingId")?:""
+        val usercentricsSettingsId = usercentricsproperties.getProperty("settingsId")?:""
         buildConfigField(type = "String", name = "USERCENTRICS_SETTINGS_ID", value = usercentricsSettingsId)
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

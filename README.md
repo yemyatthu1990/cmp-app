@@ -1,13 +1,8 @@
-**
 
 # Usercentrics SDK Integration App
 
-**
-
-**
 
 ## Instructions
-** 
 
  - Clone the repository  Import the project in latest version of Android Studio
  - Create a file name usercentrics.properties inside the root project folder and add a property named settingId. For eg,  `settingId = "123456"`   

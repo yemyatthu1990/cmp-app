@@ -1,4 +1,4 @@
-package com.yemyatthu.usercentricsappchallenge
+package com.yemyatthu.usercentricsappchallenge.presentation.ui
 
 import android.content.Context
 import android.os.Bundle

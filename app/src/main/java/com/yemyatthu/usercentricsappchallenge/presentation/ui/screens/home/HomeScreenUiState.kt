@@ -5,4 +5,5 @@ sealed class HomeScreenUiState {
     data object ShowConsentBanner : HomeScreenUiState()
     data class ShowCost(val totalCost: Int) : HomeScreenUiState()
     data class Error(val message: String) : HomeScreenUiState()
+    data class EnabledConsentButton(val enabled: Boolean) : HomeScreenUiState()
 }

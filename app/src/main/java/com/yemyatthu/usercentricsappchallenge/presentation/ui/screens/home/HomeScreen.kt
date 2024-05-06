@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -31,6 +32,7 @@ import com.usercentrics.sdk.ButtonLayout
 import com.usercentrics.sdk.ButtonSettings
 import com.usercentrics.sdk.ButtonType
 import com.usercentrics.sdk.SecondLayerStyleSettings
+import com.usercentrics.sdk.Usercentrics
 import com.usercentrics.sdk.UsercentricsBanner
 import com.usercentrics.sdk.UsercentricsConsentUserResponse
 import com.yemyatthu.usercentricsappchallenge.R
@@ -41,6 +43,9 @@ import com.yemyatthu.usercentricsappchallenge.presentation.ui.theme.Usercentrics
 fun HomeScreen(viewModel: HomeScreenViewModel) {
     val state by viewModel.uiState.collectAsState()
     var totalCost by remember { mutableIntStateOf(0) }
+    var enabledButton by remember {
+        mutableStateOf(false)
+    }
 
     when (state) {
         is HomeScreenUiState.ShowConsentBanner -> {
@@ -60,6 +65,10 @@ fun HomeScreen(viewModel: HomeScreenViewModel) {
 
         is HomeScreenUiState.Initial -> {
             totalCost = 0
+            enabledButton = false
+        }
+        is HomeScreenUiState.EnabledConsentButton -> {
+            enabledButton = (state as HomeScreenUiState.EnabledConsentButton).enabled
         }
     }
     Column(
@@ -71,6 +80,7 @@ fun HomeScreen(viewModel: HomeScreenViewModel) {
         DisplayCosts(totalCost = totalCost)
         Spacer(modifier = Modifier.weight(1.0f))
         Button(
+            enabled = enabledButton,
             onClick = { viewModel.onConsentButtonClicked() },
             modifier = Modifier.padding(24.dp),
             shape = RoundedCornerShape(8.dp),

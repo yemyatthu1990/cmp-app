@@ -2,6 +2,7 @@ package com.yemyatthu.usercentricsappchallenge.presentation.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.usercentrics.sdk.Usercentrics
 import com.usercentrics.sdk.UsercentricsConsentUserResponse
 import com.yemyatthu.usercentricsappchallenge.domain.usecase.CalculateCostsUseCase
 import com.yemyatthu.usercentricsappchallenge.domain.usecase.GetConsentedServicesUseCase
@@ -24,7 +25,16 @@ class HomeScreenViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow<HomeScreenUiState>(HomeScreenUiState.Initial)
     val uiState: StateFlow<HomeScreenUiState> = _uiState.asStateFlow()
-
+    init {
+        viewModelScope.launch {
+            Usercentrics.isReady(onSuccess = {
+                //Only enable show consent banner button when the sdk is ready
+                _uiState.value = HomeScreenUiState.EnabledConsentButton(true)
+            }, onFailure =  {
+                _uiState.value = HomeScreenUiState.EnabledConsentButton(false)
+            })
+        }
+    }
     fun onConsentButtonClicked() {
         viewModelScope.launch {
             _uiState.value = HomeScreenUiState.ShowConsentBanner
